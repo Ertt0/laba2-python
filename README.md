@@ -27,16 +27,16 @@ streamstats - Python-пакет для анализатора событий и�
 
 CSV-файл должен содержать заголовок с названиями полей:
 
-```timestamp,level,source,message
+timestamp,level,source,message
 2021-03-20T20:00:00Z,INFO,web,Hello
-2023-03-20T10:20:01Z,ERROR,auth,Hi```
+2023-03-20T10:20:01Z,ERROR,auth,Hi
 
 ## JSONL
 
 В JSONL каждый объект события записывается на отдельной строке:
 
-```{"timestamp":"2022-10-21T12:00:00Z","level":"INFO","source":"web","message":"started"}
-{"timestamp":"2025-10-21T12:00:01Z","level":"ERROR","source":"db","message":"failed"}```
+{"timestamp":"2022-10-21T12:00:00Z","level":"INFO","source":"web","message":"started"}
+{"timestamp":"2025-10-21T12:00:01Z","level":"ERROR","source":"db","message":"failed"}
 
 ## Использование
 
