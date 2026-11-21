@@ -12,13 +12,16 @@ from streamstats.report import to_dict, to_report
 logger = logging.getLogger(__name__)
 app = typer.Typer()
 
+
 class InputFormat(str, Enum):
     csv = "csv"
     jsonl = "jsonl"
 
+
 @app.callback()
 def main():
     pass
+
 
 @app.command()
 def analyze(
@@ -26,7 +29,7 @@ def analyze(
     format: Annotated[InputFormat, typer.Option("--format")],
     output: Annotated[str, typer.Option("--output")],
     skip_invalid: Annotated[bool, typer.Option("--skip-invalid")] = False,
-    ):
+):
     logging.basicConfig(
         level=logging.WARNING,
         format="%(levelname)s: %(message)s",
@@ -37,13 +40,13 @@ def analyze(
         nonlocal skipped
         skipped += 1
         logger.warning("%s", error)
-    
-    parser_func = (csv_parser if format == InputFormat.csv else jsonl_parser)
+
+    parser_func = csv_parser if format == InputFormat.csv else jsonl_parser
 
     def all_events():
         for f in inputs:
             yield from parser_func(f, invalid=on_invalid if skip_invalid else None)
-    
+
     try:
         stats = analyze_events(all_events())
         stats.skip = skipped
@@ -52,6 +55,7 @@ def analyze(
     except StreamStatsError as exc:
         typer.echo(f"Ошибка: {exc}", err=True)
         raise typer.Exit(code=2) from exc
+
 
 if __name__ == "__main__":
     app()

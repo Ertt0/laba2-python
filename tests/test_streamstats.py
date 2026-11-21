@@ -11,14 +11,14 @@ def test_analyze_counts_events():
         timestamp="2077-12-01T15:00:00+04:00",
         level=Level.INFO,
         source="web",
-        message="meooow"
+        message="meooow",
     )
 
     event2 = Event(
         timestamp="1984-11-11T11:11:11Z",
         level=Level.ERROR,
         source="payment",
-        message="rr"
+        message="rr",
     )
 
     events = [event1, event2]
@@ -30,12 +30,14 @@ def test_analyze_counts_events():
     assert stats.sources["web"] == 1
     assert stats.sources["payment"] == 1
 
+
 def test_empty_jsonl():
     with open("empty.jsonl", "w", encoding="utf-8"):
         pass
     events = list(jsonl_parser("empty.jsonl"))
 
     assert len(events) == 0
+
 
 def test_jsonl_parser_events():
     with open("events.jsonl", "w", encoding="utf-8") as file:
@@ -50,11 +52,11 @@ def test_jsonl_parser_events():
     assert events[0].source == "auth"
     assert events[0].message == "ww"
 
+
 def test_csv_parser_events():
     with open("events.csv", "w", encoding="utf-8") as file:
         file.write(
-        "timestamp,level,source,message\n"
-        "2053-10-10T08:00:00+01:00,ERROR,auth,ww\n"
+            "timestamp,level,source,message\n2053-10-10T08:00:00+01:00,ERROR,auth,ww\n"
         )
 
     events = list(csv_parser("events.csv"))
@@ -62,22 +64,18 @@ def test_csv_parser_events():
     assert len(events) == 1
     assert events[0].level == Level.ERROR
 
+
 def test_invalid_timestamp_error():
     with open("err.jsonl", "w", encoding="utf-8") as file:
-        file.write(
-            '{"timestamp":"no",'
-            '"level":"INFO","source":"auth","message":"ww"}\n'
-        )
+        file.write('{"timestamp":"no","level":"INFO","source":"auth","message":"ww"}\n')
 
     with pytest.raises(InvalidTimestamp):
         list(jsonl_parser("err.jsonl"))
-    
+
+
 def test_skip_invalid_timestamp():
     with open("skip_err.jsonl", "w", encoding="utf-8") as file:
-        file.write(
-            '{"timestamp":"no",'
-            '"level":"INFO","source":"auth","message":"ww"}\n'
-        )
+        file.write('{"timestamp":"no","level":"INFO","source":"auth","message":"ww"}\n')
 
     errors = []
     events = list(jsonl_parser("skip_err.jsonl", invalid=errors.append))
@@ -85,13 +83,13 @@ def test_skip_invalid_timestamp():
     assert len(events) == 0
     assert len(errors) == 1
 
+
 def test_combine_files():
     with open("file1.jsonl", "w", encoding="utf-8") as file1:
         file1.write(
             '{"timestamp":"2001-09-10T00:00:01Z",'
             '"level":"ERROR","source":"payment","message":"q"}\n'
         )
-
 
     with open("file2.jsonl", "w", encoding="utf-8") as file2:
         file2.write(

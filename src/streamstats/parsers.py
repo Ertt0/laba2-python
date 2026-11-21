@@ -16,7 +16,8 @@ def mkerror(exc, file, num):
             prob = True
     if prob:
         return InvalidTimestamp("Неверная временная метка", file, num)
-    return InvalidEvent("Неверное событие", file, num)  
+    return InvalidEvent("Неверное событие", file, num)
+
 
 def jsonl_parser(file, invalid=None):
     with open(file, "r", encoding="utf-8") as f:
@@ -34,6 +35,7 @@ def jsonl_parser(file, invalid=None):
                 continue
             yield event
 
+
 def csv_parser(file, invalid=None):
     with open(file, "r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
@@ -47,4 +49,4 @@ def csv_parser(file, invalid=None):
                     raise error from exc
                 invalid(error)
                 continue
-            yield event  
+            yield event
